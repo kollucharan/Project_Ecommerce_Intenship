@@ -1,0 +1,58 @@
+/* Overall container styling */
+div {
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }     
+  
+  .filter-container {
+    width: 20%;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-right: 1px solid #e0e0e0;
+    /* height: auto; */
+  }
+  
+  .card-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 15px;
+    justify-content: center;
+  }
+  
+  .card-container p {
+    font-size: 16px;
+    color: #777;
+    margin-top: 20px;
+  }
+  
+  .filter-container,
+  .card-container {
+   
+    /* height:auto; */
+      height: 20%; 
+
+  }
+  
+  @media (max-width: 768px) {
+    .filter-container {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+    }
+  
+    .card-container {
+      width: 100%;
+      gap: 10px;
+      justify-content: space-around;
+    }
+  
+    div {
+      flex-direction: column;
+    }
+  }
+  

@@ -1,0 +1,46 @@
+button {
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #2980b9;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button.decrease-quantinity {
+  margin-right: 5px;
+}
+
+button.add-quantinity {
+  margin-left: 5px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  div {
+    flex-direction: column;
+    gap: 5px;
+  }
+  button.decrease-quantinity {
+    margin-right: 0px;
+    margin-bottom: 5px;
+  }
+  
+  button.add-quantinity {
+    margin-left: 0px;
+    margin-top: 5px;
+  }
+
+  button {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+}
