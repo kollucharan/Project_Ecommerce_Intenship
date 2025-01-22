@@ -148,7 +148,7 @@ export default function Home() {
   }
 
   if (loading) return <div><center>loading</center></div>;
-
+ 
   if (error) return <div>{error?.message}</div>;
 
   const searchName =

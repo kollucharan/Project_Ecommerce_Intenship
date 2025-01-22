@@ -225,13 +225,13 @@ const getuserinfo = ()=>{
               <p className="item-quantity">
                 <strong>Quantity:</strong> {item?.quantity}
               </p>
-              <button onClick={() => decreasequantity(item)} >
+              <button onClick={() => decreasequantity(item)} style={{marginRight:"5px"}}>
                -
               </button>
               <button onClick={() => remove(item)} className="remove">
                 Remove From Cart
               </button>
-              <button onClick={()=>increasequantity(item)} >
+              <button onClick={()=>increasequantity(item)}  style={{marginLeft:"5px"}}>
                +
               </button>
             </div>

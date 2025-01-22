@@ -2,8 +2,6 @@ import { useMutation, gql, useLazyQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-
-// import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";  
 import {additemtocart, incItemtocart} from "../../Slices/cartslice";
 import "./Addtocart.css";
@@ -89,45 +87,45 @@ mutation IncrementCartQuantity(
 
 `;
 
-const DEC_CART = gql`
-  mutation DecreaseCartQuantity($product_id: Int!, $user_id: Int!) {
-    update_cart(
-      where: {
-        product_id: { _eq: $product_id }
-        user_id: { _eq: $user_id }
-        is_deleted: { _eq: false }
-        quantity: { _gt: 1 } # Decrease only if quantity > 1
-      }
-      _inc: { quantity: -1 } # Decrease quantity by 1
-    ) {
-      returning {
-        id
-        product_id
-        user_id
-        quantity
-        is_deleted
-      }
-    }
+// const DEC_CART = gql`
+//   mutation DecreaseCartQuantity($product_id: Int!, $user_id: Int!) {
+//     update_cart(
+//       where: {
+//         product_id: { _eq: $product_id }
+//         user_id: { _eq: $user_id }
+//         is_deleted: { _eq: false }
+//         quantity: { _gt: 1 } # Decrease only if quantity > 1
+//       }
+//       _inc: { quantity: -1 } # Decrease quantity by 1
+//     ) {
+//       returning {
+//         id
+//         product_id
+//         user_id
+//         quantity
+//         is_deleted
+//       }
+//     }
 
-    update_cart_set_deleted: update_cart(
-      where: {
-        product_id: { _eq: $product_id }
-        user_id: { _eq: $user_id }
-        is_deleted: { _eq: false }
-        quantity: { _eq: 1 } # Set is_deleted if quantity == 1
-      }
-      _set: { is_deleted: true } # Mark as deleted
-    ) {
-      returning {
-        id
-        product_id
-        user_id
-        quantity
-        is_deleted
-      }
-    }
-  }
-`;
+//     update_cart_set_deleted: update_cart(
+//       where: {
+//         product_id: { _eq: $product_id }
+//         user_id: { _eq: $user_id }
+//         is_deleted: { _eq: false }
+//         quantity: { _eq: 1 } # Set is_deleted if quantity == 1
+//       }
+//       _set: { is_deleted: true } # Mark as deleted
+//     ) {
+//       returning {
+//         id
+//         product_id
+//         user_id
+//         quantity
+//         is_deleted
+//       }
+//     }
+//   }
+// `;
 
 
 function AddToCart({ product }) {
@@ -235,7 +233,6 @@ function AddToCart({ product }) {
           variables: {
             
             product_id: product.id,
-            // user_id: user.id,
             user_id:user
           },
           context: { headers },

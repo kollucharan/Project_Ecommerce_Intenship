@@ -25,6 +25,10 @@ const ADD_PRODUCT = gql`
       name
       price
       quantity
+      image_url
+      category{
+        name
+      }
     }
   }
   `
@@ -36,7 +40,7 @@ const ADD_PRODUCT = gql`
     const [productprice,setProductprice]=useState(0);
     const [quantity,setQuantity]=useState(0);
     const [imageurl,setImageUrl]=useState('');
-    const [categoryid,setCategoryid]=useState('');
+    const [categoryid,setCategoryid]=useState(0);
 const availableproducts = useSelector((state) => state.products. availabaleproducts);
 
    
@@ -50,6 +54,14 @@ const availableproducts = useSelector((state) => state.products. availabaleprodu
    const add= async (e) =>{
      
     e.preventDefault();
+
+    if(quantity<=0||productprice<=0){   
+     
+      setMessage("Quantity and Price should be greater than 0");
+      return;
+
+
+    }
    
  const  { data } = await addproduct({
 
@@ -94,7 +106,7 @@ const availableproducts = useSelector((state) => state.products. availabaleprodu
                     <input type="text" name="productdescription" required  onChange={(e)=>{setProductdescription(e.target.value)}}></input>
 
                     <label>Product Price:</label>
-                    <input type="text" name="productprice" required  onChange={(e)=>{setProductprice(e.target.value)}}></input>
+                    <input type="number" name="productprice" required  onChange={(e)=>{setProductprice(e.target.value)}}></input>
 
 {/* 
                     <label>Category id:</label>
@@ -117,7 +129,7 @@ const availableproducts = useSelector((state) => state.products. availabaleprodu
                     <input type="text" name="imageurl" required onChange={(e)=>{setImageUrl(e.target.value)}}></input> 
                    
                     <label>Quantity:</label>
-                    <input type="text" name="Quantity" required onChange={(e)=>{setQuantity(e.target.value)}}></input> 
+                    <input type="number" name="Quantity" required onChange={(e)=>{setQuantity(e.target.value)}}></input> 
 
                     {message && <p>{message}</p>}
 
@@ -131,3 +143,10 @@ const availableproducts = useSelector((state) => state.products. availabaleprodu
 
    } 
    export default AddProduct;
+ 
+
+
+
+
+
+
