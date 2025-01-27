@@ -10,11 +10,11 @@ const hasRunSlice = createSlice({
       console.log("hi");
       state.hasRun = true;
     },
-  
-  SetHasRunFalse: (state, action) => {
-    state.hasRun = false;
-  }
-},
+
+    SetHasRunFalse: (state, action) => {
+      state.hasRun = false;
+    },
+  },
 });
-export const { SetHasRun , SetHasRunFalse} = hasRunSlice.actions;
+export const { SetHasRun, SetHasRunFalse } = hasRunSlice.actions;
 export default hasRunSlice.reducer;

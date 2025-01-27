@@ -1,36 +1,8 @@
-// import React from "react";
-// import {render,screen,fireEvent} from '../../../test-utils';
-// import Filter from './Filter'
-// import '@testing-library/jest-dom';
-// import { Provider } from "react-redux";
-// import {store} from '../../../src/Reduxstore/store'
-
-// describe('filter testing',()=>{
-    
-//     test ("test for correct rendering of filter component",()=>{
-//         render(
-//        <Provider store={store}>
-//         <Filter/>
-//         </Provider>
-//        )
-//         const elec= screen.getByText(/Electronics/i);
-//         expect(elec).toBeInTheDocument();
-//         const Acc= screen.getByText(/Accessories/i);
-//         expect(Acc).toBeInTheDocument();
-//         const Ho= screen.getByText(/Home Applicances/i);
-//         expect(Ho).toBeInTheDocument();
-
-       
-//     })
-// })
-
-
-
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Filter from "./Filter.js";
 import { useDispatch } from "react-redux";
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 
 jest.mock("react-redux", () => ({
   useDispatch: jest.fn(),
@@ -97,8 +69,8 @@ describe("Filter Component", () => {
     render(<Filter />);
 
     const accessoriesCheckbox = screen.getByLabelText(/accessories/i);
-    fireEvent.click(accessoriesCheckbox); 
-    fireEvent.click(accessoriesCheckbox); 
+    fireEvent.click(accessoriesCheckbox);
+    fireEvent.click(accessoriesCheckbox);
 
     expect(mockDispatch).toHaveBeenCalledWith({
       type: "categories/removefromcategories",
@@ -122,8 +94,8 @@ describe("Filter Component", () => {
     render(<Filter />);
 
     const homeAppliancesCheckbox = screen.getByLabelText(/home applicances/i);
-    fireEvent.click(homeAppliancesCheckbox); 
-    fireEvent.click(homeAppliancesCheckbox); 
+    fireEvent.click(homeAppliancesCheckbox);
+    fireEvent.click(homeAppliancesCheckbox);
 
     expect(mockDispatch).toHaveBeenCalledWith({
       type: "categories/removefromcategories",
@@ -146,4 +118,3 @@ describe("Filter Component", () => {
     expect(electronicsCheckbox.checked).toBe(false);
   });
 });
-

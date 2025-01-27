@@ -1,6 +1,17 @@
 .App {
   text-align: center;
 }
+.tem {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none; /* Chrome, Safari, Edge  removing side bars on right most of page*/
+}
 
 .App-logo {
   height: 40vmin;

@@ -5,9 +5,7 @@ const initialState = {
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers:
-  
-  {
+  reducers: {
     setcartdetails: (state, action) => {
       state.itemsincart = action.payload;
     },
@@ -21,45 +19,30 @@ const cartSlice = createSlice({
       }
     },
 
-//     incItemtocart: (state, action) => { 
-//       console.log(action.payload);
-//       const existingProduct = state.itemsincart.find(
-//         (item) => item.id === action.payload.id
-//       );
-//       if (existingProduct) {
-//         existingProduct.quantity += 1;
-//       } else {
-//         state.itemsincart.push({ ...action.payload, quantity: 1 }); // Add new item with quantity 1
-//       }
+    incItemtocart: (state, action) => {
+      console.log(action.payload);
 
-// }
-   
-incItemtocart: (state, action) => {
-  console.log(action.payload);
+      const existingProduct = state.itemsincart.find(
+        (item) => item.id === action.payload.id
+      );
+      const maxQuantity = action.payload.max_quantity;
+      //  console.log(maxQuantity);
 
-  const existingProduct = state.itemsincart.find((item) => item.id === action.payload.id);
-  const maxQuantity = action.payload.max_quantity;  
-  //  console.log(maxQuantity);
-
-  if (existingProduct) {
-    
-    if (existingProduct.quantity < maxQuantity) {
-      existingProduct.quantity += 1;  
-    } else {
-      console.log("Max quantity reached for this product.");
-      alert("Max Quantity Reached")
-      existingProduct.quantity =maxQuantity; 
-    }
-  } 
-  else {
-   
-    state.itemsincart.push({
-      ...action.payload,
-      quantity: 1
-    });
-  }
-}
-    ,
+      if (existingProduct) {
+        if (existingProduct.quantity < maxQuantity) {
+          existingProduct.quantity += 1;
+        } else {
+          console.log("Max quantity reached for this product.");
+          alert("Max Quantity Reached");
+          existingProduct.quantity = maxQuantity;
+        }
+      } else {
+        state.itemsincart.push({
+          ...action.payload,
+          quantity: 1,
+        });
+      }
+    },
     decItemtocart: (state, action) => {
       console.log("hi");
       const existingProduct = state.itemsincart.find(
@@ -75,7 +58,7 @@ incItemtocart: (state, action) => {
     },
 
     removeitemfromcart: (state, action) => {
-      console.log('hi');
+      console.log("hi");
       state.itemsincart = state.itemsincart.filter(
         (item) => item.id !== action.payload.id
       );
@@ -88,7 +71,7 @@ export const {
   additemtocart,
   removeitemfromcart,
   decItemtocart,
-  incItemtocart
+  incItemtocart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

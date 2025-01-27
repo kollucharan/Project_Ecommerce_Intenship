@@ -22,7 +22,7 @@ button.add-quantinity {
   margin-left: 5px;
 }
 
-/* Responsive design for smaller screens */
+
 @media (max-width: 768px) {
   div {
     flex-direction: column;
@@ -32,7 +32,7 @@ button.add-quantinity {
     margin-right: 0px;
     margin-bottom: 5px;
   }
-  
+
   button.add-quantinity {
     margin-left: 0px;
     margin-top: 5px;

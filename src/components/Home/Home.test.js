@@ -1,11 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useQuery } from "@apollo/client";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import Cookies from "js-cookie";
 import Home from "./Home.js"; 
-import { setproductdetails, SetHasRun } from "../../Slices/productsslice";
 import { BrowserRouter } from "react-router-dom";
 import '@testing-library/jest-dom';
 
@@ -43,8 +39,8 @@ describe("Home", () => {
 test("renders error state correctly", () => {
     useQuery.mockReturnValue({
       data: null,
-      loading: false,
-      error: new Error("network issue"),
+      loading: true,
+      error: null,
     });
    render(
         <BrowserRouter>
@@ -53,11 +49,7 @@ test("renders error state correctly", () => {
       );
       expect(screen.getAllByText(/network issue/i)[0]).toBeInTheDocument();
   });
-
-
-      
-           
-        });
+ });
 
 
    

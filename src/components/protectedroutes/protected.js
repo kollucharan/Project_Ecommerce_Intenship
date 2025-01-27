@@ -1,18 +1,17 @@
 import Cookies from "js-cookie";
 import { Outlet, Navigate } from "react-router-dom";
 
-
- const Protectedroutes = ({ element }) => {
-
+const Protectedroutes = ({ element }) => {
   let token = Cookies.get("jwt_token");
-  
 
-  if(!token)
-    return <Navigate to="/login" />;
+  if (!token) return <Navigate to="/login" />;
 
-  return <> <Outlet/></>
+  return (
+    <>
+      {" "}
+      <Outlet />
+    </>
+  );
 };
 
-
- export default Protectedroutes;
-
+export default Protectedroutes;

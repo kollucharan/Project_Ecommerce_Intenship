@@ -5,7 +5,7 @@ export default function Contactus() {
   return (
     <div>
       <div>
-       <Head />
+        <Head />
       </div>
       <br />
       <br />

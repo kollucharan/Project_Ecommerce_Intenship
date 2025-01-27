@@ -1,14 +1,12 @@
-import  React ,{ useState } from "react";
-import './searchbar.css';
-
+import React, { useState } from "react";
+import "./searchbar.css";
 export default function Searchbar({ setSubmittedValue }) {
-  const [searchTerm, setSearchTerm] = useState(""); 
-
+  const [searchTerm, setSearchTerm] = useState("");
   function handleInputChange(e) {
     setSearchTerm(e.target.value);
   }
 
-  function handlebuttonclick() {
+  async function handlebuttonclick() {
     setSubmittedValue(searchTerm);
   }
 
