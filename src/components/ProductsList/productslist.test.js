@@ -33,7 +33,6 @@ gql: jest.fn(),
     </ApolloProvider> ) 
 
   
-    // expect(screen.getAllByText(/loading/i)[0]).toBeInTheDocument();
 
      expect(screen.getByText(/loading/i)).toBeInTheDocument();
       

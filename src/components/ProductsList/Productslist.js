@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import Item from "../item/item.js";
 import { useEffect } from "react";
+import "./productslist.css";
 
 const GET_PRODUCTS_QUERY = gql`
   query GetProducts(
@@ -47,7 +48,8 @@ const GET_PRODUCTS_QUERY = gql`
 
 export default function Productlist({ submittedValue }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  // const itemsPerPage = 4;
+  const itemsPerPage = 1;
   const indexOfFirstItem = (currentPage - 1) * itemsPerPage;
 
   const categories = useSelector((state) => state.categories?.filters);
@@ -82,6 +84,13 @@ export default function Productlist({ submittedValue }) {
     data?.products_aggregate_count?.length / itemsPerPage
   );
 
+  const handleprev = () => {
+    setCurrentPage(currentPage - 1);
+  };
+  const handlenext = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
   const availableproducts = useSelector(
     (state) => state?.products?.availabaleproducts
   );
@@ -103,38 +112,56 @@ export default function Productlist({ submittedValue }) {
       <div style={{ display: "flex", justifyContent: "center" }}>
         {availableproducts?.length > 0 ? (
           availableproducts?.map((item) => (
-            <Item key={item.id} product={item} />
+            <Item
+              key={item.id}
+              product={item}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
           ))
         ) : (
           <p>No products found.</p>
         )}
       </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        {currentPage > 1 && (
-          <button
-            style={{
-              backgroundColor: "yellowgreen",
-              width: "100px",
-              marginRight: "3px",
-            }}
-            onClick={() => setCurrentPage((currentPage) => currentPage - 1)}
-          >
-            previous Page
-          </button>
-        )}
-        {currentPage < totalPages && (
-          <button
-            style={{
-              backgroundColor: "yellowgreen",
-              width: "100px",
-              marginLeft: "3px",
-            }}
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
-            next page
-          </button>
-        )}
-      </div>
+
+      {totalPages > 1 && (
+        <div className="temp">
+          {/* added */}
+          {currentPage > 1 && (
+            <button className="buttonsforpagination" onClick={handleprev}>
+              prev
+            </button>
+          )}
+
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+            (page) => (
+              <div>
+                <button
+                  className="buttonsforpagination"
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  style={{
+                    backgroundColor:
+                      currentPage === page ? "#007bff" : "#f8f9fa",
+                    color: currentPage === page ? "white" : "black",
+                    marginRight: "5px",
+                  }}
+                >
+                  {page}
+                </button>
+              </div>
+            )
+          )}
+          {/* added */}
+
+          {currentPage < totalPages && (
+            <button className="buttonsforpagination" onClick={handlenext}>
+              {" "}
+              next{" "}
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

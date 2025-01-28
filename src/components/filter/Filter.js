@@ -11,34 +11,32 @@ export default function Filter() {
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
   const [checked3, setChecked3] = useState(false);
-  const handle1 = () => setChecked1((prev) => !prev);
-  const handle2 = () => setChecked2((prev) => !prev);
-  const handle3 = () => setChecked3((prev) => !prev);
 
-  const handleFilter = async (e) => {
-    e.preventDefault();
-
-    if (checked1) {
-      dispatch(addtocategories("Electronics"));
-    } else {
+  const handle1 = () => {
+    if (!checked1) dispatch(addtocategories("Electronics"));
+    else {
       dispatch(removefromcategories("Electronics"));
     }
+    setChecked1((prev) => (prev = !prev));
+  };
 
-    if (checked2) {
-      dispatch(addtocategories("Accessories"));
-    } else {
+  const handle2 = () => {
+    if (!checked2) dispatch(addtocategories("Accessories"));
+    else {
       dispatch(removefromcategories("Accessories"));
     }
-
-    if (checked3) {
-      dispatch(addtocategories("Home Applicances"));
-    } else {
+    setChecked2((prev) => (prev = !prev));
+  };
+  const handle3 = () => {
+    if (!checked3) dispatch(addtocategories("Home Applicances"));
+    else {
       dispatch(removefromcategories("Home Applicances"));
     }
+    setChecked3((prev) => (prev = !prev));
   };
 
   return (
-    <form className="formclass" onSubmit={handleFilter}>
+    <form className="formclass">
       <div className="div1" style={{ display: "flex" }}>
         <input
           className="item1"
@@ -69,8 +67,6 @@ export default function Filter() {
         />
         <label htmlFor="Home Applicances">Home Applicances</label>
       </div>
-
-      <button type="submit">Filter</button>
     </form>
   );
 }

@@ -19,7 +19,7 @@ const DELETE_PRODUCT = gql`
     }
   }
 `;
-export default function Item({ product }) {
+export default function Item({ product,setCurrentPage ,currentPage}) {
   const dispatch = useDispatch();
   const [removeProduct, { loading, error }] = useMutation(DELETE_PRODUCT);
   const headers = {
@@ -60,6 +60,8 @@ export default function Item({ product }) {
       },
     });
     dispatch(removeproduct({ id: product.id }));
+    setCurrentPage(1);
+  // refetch();
   };
 
   return (
