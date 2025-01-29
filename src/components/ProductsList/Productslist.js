@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { setproductdetails } from "../../Slices/productsslice";
 import { useQuery, gql } from "@apollo/client";
-import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";       
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import Item from "../item/item.js";
@@ -49,7 +49,8 @@ const GET_PRODUCTS_QUERY = gql`
 export default function Productlist({ submittedValue }) {
   const [currentPage, setCurrentPage] = useState(1);
   // const itemsPerPage = 4;
-  const itemsPerPage = 1;
+  // const itemsPerPage = 1;
+  const itemsPerPage =3;
   const indexOfFirstItem = (currentPage - 1) * itemsPerPage;
 
   const categories = useSelector((state) => state.categories?.filters);
@@ -67,7 +68,7 @@ export default function Productlist({ submittedValue }) {
       categories:
         categories.length > 0
           ? categories
-          : ["Electronics", "Accessories", "Home Appliances"],
+          : ["Electronics", "Accessories", "Home Appliances"],    
     },
     context: {
       headers,
@@ -75,8 +76,8 @@ export default function Productlist({ submittedValue }) {
 
     fetchPolicy: "network-only",
     onCompleted: (data) => {
-      console.log(data.products);
-      dispatch(setproductdetails(data.products));
+      // console.log(data.products);
+      dispatch(setproductdetails(data?.products));
     },
   });
 

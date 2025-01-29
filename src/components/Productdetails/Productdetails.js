@@ -22,6 +22,7 @@ const QUERY_TO_GET_PRODUCT = gql`
 `;
 
 export default function Productdetails() {
+
   const getuserinfo = () => {
     const token = Cookies.get("jwt_token");
 
@@ -74,7 +75,7 @@ export default function Productdetails() {
   console.log(data);
   return (
     <div>
-      {/* <Headfor /> */}
+      
       <Head />
 
       <div className="productdetailsdiv">
@@ -89,7 +90,7 @@ export default function Productdetails() {
         <p className="pproductdetails">{data?.products_by_pk?.description}</p>
         <div>
           {!is_admin && <AddToCart product={product} />}
-          {/* { is_admin && /> } */}
+          
         </div>
       </div>
     </div>

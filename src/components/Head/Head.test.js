@@ -9,29 +9,6 @@ jest.mock('js-cookie', () => ({
     remove: jest.fn(),
 }));
 
-// import React from 'react';
-// import { render, screen, fireEvent } from '@testing-library/react';
-// import '@testing-library/jest-dom';
-// import { BrowserRouter as Router } from 'react-router-dom';
-// import Head from './Head';
-
-// describe("checking head component",()=>{
-//     test ("check for rendering of components",()=>{
-//          render(
-//         < Router>
-//         <Head/>
-//         </Router> 
-//     )
-
-//     const home=screen.getAllByText(/Home/i)[0]
-//     const contact=screen.getAllByText(/contact us/i)[0]
-//   const log=screen.getAllByText(/Logout/i)[0]
-//     expect (home).toBeInTheDocument();
-//    expect(contact).toBeInTheDocument();
-//    expect(log).toBeInTheDocument();
-
-
-//     })
 describe("checking head component", () => {
     test("check for rendering of components", () => {
         render(

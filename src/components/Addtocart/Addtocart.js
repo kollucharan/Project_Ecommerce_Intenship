@@ -19,7 +19,6 @@ const CHECKING_ITEM_INCART = gql`
   }
 `;
 
-// Mutation to insert a new cart item
 const ADD_ITEM_TOCART = gql`
   mutation AddItemToCart($product_id: Int!, $user_id: Int!) {
     insert_cart_one(
@@ -74,6 +73,7 @@ const UPDATE_CART = gql`
 `;
 
 function AddToCart({ product }) {
+
   const getuserinfo = () => {
     const token = Cookies.get("jwt_token");
 
@@ -100,7 +100,6 @@ function AddToCart({ product }) {
   const navigate = useNavigate();
   const [inHome, setInHome] = useState(false);
   const [fetchCart] = useLazyQuery(CHECKING_ITEM_INCART);
-
   const [getmaxquantity, { loading, error }] = useLazyQuery(GET_MAX_QUANTITY);
   const [addItemToCart] = useMutation(ADD_ITEM_TOCART);
   const [updateCart] = useMutation(UPDATE_CART);

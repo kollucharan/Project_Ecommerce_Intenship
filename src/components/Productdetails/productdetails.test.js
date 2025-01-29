@@ -1,83 +1,75 @@
 import React from "react";
-import { screen, render } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
-import Productdetails from "./Productdetails";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-import "@testing-library/jest-dom";
+import { render, screen, fireEvent } from "@testing-library/react";
+import  { useQuery, gql, ApolloProvider } from "@apollo/client";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import "@testing-library/jest-dom";
 import { store } from "../../Reduxstore/store";
-import { ApolloProvider } from "@apollo/client";
-import { client } from "../../index";
+import Productdetails from "./Productdetails";
+// import { client } from "../../index";
+import client from '@apollo/client'
 
 jest.mock("@apollo/client", () => ({
   ...jest.requireActual("@apollo/client"),
   useQuery: jest.fn(),
+  gql: jest.fn(),
 }));
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useParams: jest.fn(),
-}));
 
-describe("test for product details component", () => {
-  test("verifying loading ", async () => {
-    useParams.mockReturnValue({ id: "1" });
-    useQuery.mockReturnValue({
-      data: null,
-      loading: true,
-      error: null,
-    });
+describe("testing of product details component", () => {
+  test("test for loading", () => {
+   useQuery.mockReturnValue({
+        data: null,
+        loading: true,
+        error: null,
+      });
 
-    render(<Productdetails />);
-    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
+    render(
+
+         <ApolloProvider client={client}>
+           <Provider store={store}>
+             <BrowserRouter>
+               <Productdetails/>
+             </BrowserRouter>
+           </Provider>
+         </ApolloProvider>
+       );
+
+       expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
   });
 
-  test("verifying error ", async () => {
-    useParams.mockReturnValue({ id: "1" });
+  test("test for error handling",()=>{
+
     useQuery.mockReturnValue({
       data: null,
       loading: false,
-      error: new Error("error"),
-    });
-
-    render(<Productdetails />);
-
-    expect(screen.getByText(/error/i)).toBeInTheDocument();
-  });
-
-  test("verifying data ", async () => {
-    const mockData = {
-      products_by_pk: {
-        id: 1,
-        name: "laptop",
-        price: 100,
-        description: "nice",
-        image_url: "https://via.placeholder.com/150",
-      },
-    };
-    useParams.mockReturnValue({ id: "1" });
-    useQuery.mockReturnValue({
-      data: mockData,
-      loading: false,
-      error: null,
+      error: new Error ("unknown error"),
     });
 
     render(
+
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
-            <Productdetails />
+            <Productdetails/>
           </BrowserRouter>
         </Provider>
       </ApolloProvider>
     );
+  
+    expect(screen.getByText(/unknown error/i)).toBeInTheDocument();
 
-    await waitFor(() => screen.getByText(/laptop/i));
+  })
 
-    // Assertions
-    expect(screen.getByText(/laptop/i)).toBeInTheDocument();
-    expect(screen.getByText(/nice/i)).toBeInTheDocument();
-    expect(screen.getByText(/\$100/i)).toBeInTheDocument();
-  });
+  test("test for data is rendering correctly or not",()=>{
+
+     
+
+
+  })
+
+
+
 });

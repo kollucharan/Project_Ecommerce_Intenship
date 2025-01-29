@@ -101,28 +101,31 @@ const GET_MAX_QUANTITY = gql`
     }
   }
 `;
+
 function Cart() {
   const getuserinfo = () => {
     const token = Cookies.get("jwt_token");
-
     if (token) {
-      const decoded = jwtDecode(token);
+      try {
+        const decoded = jwtDecode(token);
+        const user = decoded["userId"];
+        const role =
+          decoded["https://hasura.io/jwt/claims"]["x-hasura-default-role"];
 
-      const user = decoded["userId"];
-      const role =
-        decoded["https://hasura.io/jwt/claims"]["x-hasura-default-role"];
-
-      return { user, role };
+        return { user, role };
+      } catch (error) {
+        console.error("Error decoding JWT:", error);
+        return {};
+      }
     }
-    return null;
+    return {};
   };
-  const { user, role } = getuserinfo();
+  const { user, role } = getuserinfo() || {};
   const [Deletefromcart] = useMutation(DELETE_MUTATION);
   const [IncrementCartQuantity] = useMutation(UPDATE_CART);
   const [DecreaseCartQuantity] = useMutation(DEC_CART);
-  const [getproductquantity, { loading, error }] =
-    useLazyQuery(GET_MAX_QUANTITY);
-  const dispatch = useDispatch();
+  const [getproductquantity] = useLazyQuery(GET_MAX_QUANTITY);
+  const dispatch = useDispatch();                               
 
   const headers = {
     Authorization: `Bearer ${Cookies.get("jwt_token")}`,

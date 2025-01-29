@@ -21,27 +21,31 @@ const DELETE_PRODUCT = gql`
 `;
 export default function Item({ product,setCurrentPage ,currentPage}) {
   const dispatch = useDispatch();
+
   const [removeProduct, { loading, error }] = useMutation(DELETE_PRODUCT);
   const headers = {
     Authorization: `Bearer ${Cookies.get("jwt_token")}`,
   };
 
-  const getuserinfo = () => {
-    const token = Cookies.get("jwt_token");
-
-    if (token) {
-      const decoded = jwtDecode(token);
-
-      const user = decoded["userId"];
-      const role =
-        decoded["https://hasura.io/jwt/claims"]["x-hasura-default-role"];
-
-      return { user, role };
-    }
-    return null;
-  };
+ const getuserinfo = () => {
+        const token = Cookies.get("jwt_token");
+        if (token) {
+          try {
+            const decoded = jwtDecode(token);
+            const user = decoded["userId"];
+            const role =
+              decoded["https://hasura.io/jwt/claims"]["x-hasura-default-role"];
+    
+            return { user, role };
+          } catch (error) {
+            console.error("Error decoding JWT:", error);
+            return {};
+          }
+        }
+        return {};
+      };
+      const { user, role } = getuserinfo() || {};
   let is_admin = false;
-  const { user, role } = getuserinfo();
   if (role === "admin") {
     is_admin = true;
   } else {
