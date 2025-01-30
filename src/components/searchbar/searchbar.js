@@ -6,7 +6,7 @@ export default function Searchbar({ setSubmittedValue }) {
     setSearchTerm(e.target.value);
   }
 
-  async function handlebuttonclick() {
+   function handlebuttonclick() {
     setSubmittedValue(searchTerm);
   }
 

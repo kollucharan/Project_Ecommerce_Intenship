@@ -1,7 +1,4 @@
-/* Form Container Styling */
-/* .filterComponent{
-    /* height: 10vh;
-}  */
+
 .formclass {
     max-width: 400px;
     margin: 20px auto;
@@ -13,30 +10,35 @@
     box-sizing: border-box;
   }
   
-  /* Checkbox Item Container */
-  .div1 {
+  
+  .filterItems {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     margin-bottom: 15px;
     gap: 10px;
   }
+  .category{
+    display: flex;
+    align-items: center;
+  }
   
-  /* Checkbox Input */
+ 
   .item1 {
     width: 18px;
     height: 18px;
     cursor: pointer;
-    accent-color: #3498db; /* For modern browsers */
+    accent-color: #3498db; 
+    margin-right: 5px;
   }
   
-  /* Label Styling */
+  
   label {
     font-size: 16px;
     color: #333;
     cursor: pointer;
   }
   
-  /* Hover Effect for Label */
+  
   .div1:hover label {
     color: #2980b9;
     font-weight: bold;

@@ -8,15 +8,32 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
+  HttpLink, 
 } from "@apollo/client";
 import "./index.css";
-
+import Cookies from "js-cookie";
 import reportWebVitals from "./reportWebVitals";
+import { setContext } from "@apollo/client/link/context";
+
+const httpLink = new HttpLink({
+  uri: 'https://coherent-skink-69.hasura.app/v1/graphql', 
+});
+const authLink = setContext((_, { headers }) => {
+ 
+  const token = Cookies.get('jwt_token');
+  return {
+    headers: {
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
 
  export const client = new ApolloClient({
-  uri: 'https://coherent-skink-69.hasura.app/v1/graphql',
+  link: authLink.concat(httpLink),  
   cache: new InMemoryCache(),
 });
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

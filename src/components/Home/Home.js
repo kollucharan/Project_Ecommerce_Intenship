@@ -4,59 +4,21 @@ import Head from "../Head/Head.js";
 import Filter from "../filter/Filter.js";
 import { useState } from "react";
 import "./Home.css";
-import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux";
 import { setRunn } from "../../Slices/runnslice.js";
 import { setcartdetails } from "../../Slices/cartslice.js";
 import Productlist from "../ProductsList/Productslist.js";
+import userdetails from "../userdetails.js";
+import { JOIN_QUERY } from "./Home.graphql.js";
 
-const JOIN_QUERY = gql`
-  query GetCartWithProductDetails($user_id: Int!) {
-    cart(
-      where: {
-        user_id: { _eq: $user_id }
-        is_deleted: { _eq: false }
-        product: { is_deleted: { _eq: false } }
-      }
-    ) {
-      id
-      product_id
-      quantity
-      product {
-        id
-        name
-        price
-        image_url
-      }
-    }
-  }
-`;
 
 export default function Home() {
   const [submittedValue, setSubmittedValue] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(3);
-  const indexOfFirstItem = (currentPage - 1) * itemsPerPage;
   const navigate = useNavigate();
 
-  const getuserinfo = () => {
-    const token = Cookies.get("jwt_token");
-
-    if (token) {
-      const decoded = jwtDecode(token);
-
-      const user = decoded["userId"];
-      const role =
-        decoded["https://hasura.io/jwt/claims"]["x-hasura-default-role"];
-
-      return { user, role };
-    }
-    return null;
-  };
   let is_admin = false;
-  const { user, role } = getuserinfo();
+  const { user, role } = userdetails();
   if (role === "admin") {
     is_admin = true;
   } else {
@@ -65,16 +27,12 @@ export default function Home() {
   const runn = useSelector((state) => state.runn.runn);
   const dispatch = useDispatch();
 
-  const headers = {
-    Authorization: `Bearer ${Cookies.get("jwt_token")}`,
-  };
+ 
 
   const { cartData, load, err } = useQuery(JOIN_QUERY, {
     variables: { user_id: user },
 
-    context: {
-      headers,
-    },
+    
     skip: runn,
     onCompleted: (cartData) => {
       if (!runn) {

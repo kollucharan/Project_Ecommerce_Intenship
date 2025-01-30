@@ -3,8 +3,8 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Searchbar from "../searchbar/searchbar";
 import Cookies from "js-cookie";
 import { useState } from "react";
-import { jwtDecode } from "jwt-decode";
 import "./header.css";
+import userdetails from "../userdetails";
 
 export default function Head({ setSubmittedValue }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -14,26 +14,8 @@ export default function Head({ setSubmittedValue }) {
   const inContactus = location.pathname === "/contactus" ? true : false;
 
   const navigate = useNavigate();
-   const getuserinfo = () => {
-       const token = Cookies.get("jwt_token");
-       if (token) {
-         try {
-           const decoded = jwtDecode(token);
-           const user = decoded["userId"];
-           const role =
-             decoded["https://hasura.io/jwt/claims"]["x-hasura-default-role"];
-   
-           return { user, role };
-         } catch (error) {
-           console.error("Error decoding JWT:", error);
-           return {};
-         }
-       }
-       return {};
-     };
-     const { user, role } = getuserinfo() || {};
-  
- 
+
+  const { role } = userdetails() || {};
   let is_admin = false;
   if (role === "admin") {
     is_admin = true;

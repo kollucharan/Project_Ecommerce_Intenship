@@ -1,53 +1,26 @@
-
-import React,{ useState, useRef } from "react";
-import { gql, useMutation } from "@apollo/client";
-import Cookies from "js-cookie";
+import React from "react";
+import { useState, useRef } from "react";
+import { useMutation } from "@apollo/client";
 import { setproductdetails } from "../../Slices/productsslice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./Additem.css";
 import Head from "../Head/Head";
+import { ADD_PRODUCT } from "./Additem.graphql";
 
-const ADD_PRODUCT = gql`
-  mutation AddProduct(
-    $name: String!
-    $price: Int!
-    $image_url: String!
-    $category_id: Int!
-    $description: String
-    $quantity: Int!
-  ) {
-    insert_products_one(
-      object: {
-        name: $name
-        price: $price
-        image_url: $image_url
-        category_id: $category_id
-        description: $description
-        is_deleted: false
-        quantity: $quantity
-      }
-    ) {
-      id
-      name
-      price
-      quantity
-      image_url
-      category {
-        name
-      }
-    }
-  }
-`;
 function AddProduct() {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
-  const [productname, setProductname] = useState("");
-  const [productdescription, setProductdescription] = useState("");
-  const [productprice, setProductprice] = useState(0);
-  const [quantity, setQuantity] = useState(0);
-  const [imageurl, setImageUrl] = useState("");
-  const [categoryid, setCategoryid] = useState(0);
+
+  const [formData, setFormData] = useState({
+    message: "",
+    productname: "",
+    productprice: 0,
+    quantity: 0,
+    imageurl: "",
+    categoryid: 0,
+    productdescription: "",
+  });
 
   const availableproducts = useSelector(
     (state) => state.products.availabaleproducts
@@ -59,12 +32,25 @@ function AddProduct() {
   const dispatch = useDispatch();
 
   const [addproduct, { loading }] = useMutation(ADD_PRODUCT);
-  const headers = {
-    Authorization: `Bearer ${Cookies.get("jwt_token")}`,
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const add = async (e) => {
     e.preventDefault();
+    const {
+      productprice,
+      quantity,
+      productname,
+      productdescription,
+      imageurl,
+      categoryid,
+    } = formData;
 
     if (productprice <= 0 && quantity <= 0) {
       setMessage("Price and Quantity both should be greater than 0");
@@ -87,30 +73,35 @@ function AddProduct() {
     if (quantity > 0 && productprice > 0) {
       setMessage("");
     }
-    const { data } = await addproduct({
-      variables: {
-        name: productname,
-        image_url: imageurl,
-        price: productprice,
-        category_id: categoryid,
-        description: productdescription,
-        quantity: quantity,
-      },
-      context: { headers },
-    });
+    try {
+      const { data } = await addproduct({
+        variables: {
+          name: productname,
+          image_url: imageurl,
+          price: productprice,
+          category_id: categoryid,
+          description: productdescription,
+          quantity: quantity,
+        },
+      });
 
-    if (data) {
-      dispatch(
-        setproductdetails([data.insert_products_one, ...availableproducts])
-      );
+      if (data) {
+        dispatch(
+          setproductdetails([data.insert_products_one, ...availableproducts])
+        );
 
-      setMessage("Product added successfully");
+        setMessage("Product added successfully");
 
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    } catch (err) {
+      console.error("GraphQL Error:", err);
+      setMessage("Failed to add product. Please try again.");
     }
   };
+
   return (
     <div>
       <Head />
@@ -122,9 +113,8 @@ function AddProduct() {
             type="text"
             name="productname"
             required
-            onChange={(e) => {
-              setProductname(e.target.value);
-            }}
+            onChange={handleInputChange}
+            value={formData.productname}
           ></input>
 
           <label>Product Description:</label>
@@ -132,30 +122,22 @@ function AddProduct() {
             type="text"
             name="productdescription"
             required
-            onChange={(e) => {
-              setProductdescription(e.target.value);
-            }}
+            onChange={handleInputChange}
+            value={formData.productdescription}
           ></input>
 
           <label>Product Price:</label>
           <input
             type="number"
             name="productprice"
-            id="pri"
             required
             ref={priceInputRef}
-            onChange={(e) => {
-              setProductprice(e.target.value);
-            }}
+            onChange={handleInputChange}
+            value={formData.productprice === 0 ? "" : formData.productprice}
           ></input>
 
           <label>Category:</label>
-          <select
-            name="categoryid"
-            required
-            value={categoryid}
-            onChange={(e) => setCategoryid(e.target.value)}
-          >
+          <select name="categoryid" required onChange={handleInputChange}  value={formData.categoryid}>
             <option value="">Select a category</option>
             <option value="1">Electronics</option>
             <option value="2">Accessories</option>
@@ -166,21 +148,18 @@ function AddProduct() {
             type="text"
             name="imageurl"
             required
-            onChange={(e) => {
-              setImageUrl(e.target.value);
-            }}
+            onChange={handleInputChange}
+            value={formData.imageurl} 
           ></input>
 
           <label>Quantity:</label>
           <input
             type="number"
-            name="Quantity"
+            name="quantity"
             ref={quantityInputRef}
-            id="quant"
             required
-            onChange={(e) => {
-              setQuantity(e.target.value);
-            }}
+            onChange={handleInputChange}
+            value={formData.quantity === 0 ? "" : formData.quantity}
           ></input>
 
           {message === "Product added successfully" ? (
