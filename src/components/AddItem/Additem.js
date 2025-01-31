@@ -96,7 +96,7 @@ function AddProduct() {
           navigate("/");
         }, 1000);
       }
-    } catch (err) {
+    } catch (err) {   
       console.error("GraphQL Error:", err);
       setMessage("Failed to add product. Please try again.");
     }

@@ -34,6 +34,7 @@ export default function Item({ product,setCurrentPage ,currentPage}) {
     setCurrentPage(1);
   
   };
+  if(error) return <div>error:{error}</div>
 
   return (
     <div className="card-item">

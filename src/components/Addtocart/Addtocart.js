@@ -25,9 +25,9 @@ function AddToCart({ product }) {
   const navigate = useNavigate();
   const [inHome, setInHome] = useState(false);
   const [fetchCart] = useLazyQuery(CHECKING_ITEM_INCART);
-  const [getmaxquantity] = useLazyQuery(GET_MAX_QUANTITY);
-  const [addItemToCart] = useMutation(ADD_ITEM_TOCART);
-  const [updateCart] = useMutation(UPDATE_CART);
+  const [getmaxquantity,{error}] = useLazyQuery(GET_MAX_QUANTITY);
+  const [addItemToCart,{error:err2}] = useMutation(ADD_ITEM_TOCART);
+  const [updateCart,{error:err3}] = useMutation(UPDATE_CART);
 
   const handleClick = async () => {
     if (!inHome) {
@@ -93,6 +93,18 @@ function AddToCart({ product }) {
       navigate("/cart");
     }
   };
+
+
+   if(error) {
+    return <div>error:{error.message}</div>
+   }
+   
+   if(err2){
+    return <div>Error is {err2.message}</div>
+   }
+   if(err3) {
+    return <div>Error :{err3.message}</div>
+   }
 
   return (
     <div>

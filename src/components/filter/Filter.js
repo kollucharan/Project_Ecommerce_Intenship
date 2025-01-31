@@ -38,7 +38,7 @@ export default function Filter() {
   };
  
   if(loading) return <div>loading</div> 
- if(error) return <div>{error}</div> 
+
  if (error) return <p>Error: {error.message}</p>;
  if (data) {
   Allcategories=data?.categories
