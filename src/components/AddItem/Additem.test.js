@@ -13,6 +13,7 @@ jest.mock("@apollo/client", () => ({
   useMutation: jest
     .fn()
     .mockReturnValue([jest.fn(), { data: null, loading: false, error: null }]),
+    useQuery:jest.fn().mockReturnValue([jest.fn(), { data: null, loading: false, error: null }])
 }));
 
 describe("testing Add item Component", () => {

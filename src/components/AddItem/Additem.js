@@ -1,16 +1,19 @@
 import React from "react";
 import { useState, useRef } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { setproductdetails } from "../../Slices/productsslice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";         
+import { useNavigate } from "react-router-dom";
 import "./Additem.css";
 import Head from "../Head/Head";
-import { ADD_PRODUCT } from "./Additem.graphql";
+import { ADD_PRODUCT, GET_CATEGORIES } from "./Additem.graphql";
 
 function AddProduct() {
   const navigate = useNavigate();
+
   const [message, setMessage] = useState("");
+
+  let categories = [];
 
   const [formData, setFormData] = useState({
     message: "",
@@ -22,6 +25,12 @@ function AddProduct() {
     productdescription: "",
   });
 
+  const { data, load, err } = useQuery(GET_CATEGORIES);
+
+  if (data) {
+    categories = data?.categories;
+  }
+
   const availableproducts = useSelector(
     (state) => state.products.availabaleproducts
   );
@@ -31,7 +40,7 @@ function AddProduct() {
 
   const dispatch = useDispatch();
 
-  const [addproduct, { loading,error }] = useMutation(ADD_PRODUCT);
+  const [addproduct, { loading, error }] = useMutation(ADD_PRODUCT);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -96,11 +105,14 @@ function AddProduct() {
           navigate("/");
         }, 1000);
       }
-    } catch (err) {   
+    } catch (err) {
       console.error("GraphQL Error:", err);
       setMessage("Failed to add product. Please try again.");
     }
   };
+
+  if (load) return <div>loading..</div>;
+  if (err) return <div>error:{err.message}</div>;
 
   return (
     <div>
@@ -118,45 +130,61 @@ function AddProduct() {
             value={formData.productname}
           ></input>
 
-          <label for ='id2'>Product Description:</label>
+          <label for="id2">Product Description:</label>
           <input
             type="text"
             name="productdescription"
             required
-            id='id2'
+            id="id2"
             onChange={handleInputChange}
             value={formData.productdescription}
           ></input>
 
-          <label for ='id3'>Product Price:</label>
+          <label for="id3">Product Price:</label>
           <input
             type="number"
             name="productprice"
             required
-            id='id3'
+            id="id3"
             ref={priceInputRef}
             onChange={handleInputChange}
             value={formData.productprice === 0 ? "" : formData.productprice}
           ></input>
 
-          <label>Category:</label>
+          {/* <label>Category:</label>
           <select name="categoryid" required onChange={handleInputChange}  value={formData.categoryid}>
             <option value="">Select a category</option>
             <option value="1">Electronics</option>
             <option value="2">Accessories</option>
             <option value="3">Home Applicances</option>
+          </select> */}
+
+          <label>Category:</label>
+          <select
+            name="categoryid"
+            required
+            onChange={handleInputChange}
+            value={formData.categoryid}
+          >
+            <option value="">Select a category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
           </select>
-          <label for = "id4">Image Url :</label>
+
+          <label for="id4">Image Url :</label>
           <input
             type="text"
             name="imageurl"
             id="id4"
             required
             onChange={handleInputChange}
-            value={formData.imageurl} 
+            value={formData.imageurl}
           ></input>
 
-          <label for ="id5">Quantity:</label>
+          <label for="id5">Quantity:</label>
           <input
             type="number"
             name="quantity"
@@ -171,9 +199,9 @@ function AddProduct() {
             <p>{message}</p>
           ) : (
             <p style={{ color: "Red" }}>{message}</p>
-          )} 
+          )}
 
-       {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
+          {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
 
           {!loading ? (
             <button type="submit"> Add Product </button>
