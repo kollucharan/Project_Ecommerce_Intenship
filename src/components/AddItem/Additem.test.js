@@ -33,10 +33,41 @@ describe("testing Add item Component", () => {
     expect(screen.getByText(/Category:/i)).toBeInTheDocument();
     expect(screen.getByText(/Quantity:/i)).toBeInTheDocument();
   });
-  test ("test 2 for add item comonent",()=>{
- 
+
+  test("test 2 for form submission", async () => {
+    const add = jest.fn();
+    const mockAddProduct = jest.fn().mockResolvedValue({
+      data: { insert_products_one: { id: 1, name: "Test Product" } },
+    });
+    
    
-  
-   
+    require("@apollo/client").useMutation.mockReturnValue([mockAddProduct, { data: null, loading: false, error: null }]);
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <AddProduct />
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+
+    const productNameInput = screen.getByLabelText(/Product Name:/i);
+    const productDescriptionInput =
+      screen.getByLabelText(/Product Description:/i);
+    const productPriceInput = screen.getByLabelText(/Product Price:/i);
+    const quantityInput = screen.getByLabelText(/Quantity:/i);
+    const submitButton = screen.getByText(/Add Product/i);
+
+    fireEvent.change(productNameInput, { target: { value: "Test Product" } });
+    fireEvent.change(productDescriptionInput, {
+      target: { value: "Test product description" },
+    });
+    fireEvent.change(productPriceInput, { target: { value: 100 } });
+    fireEvent.change(quantityInput, { target: { value: 10 } });
+
+    fireEvent.click(submitButton);
+    expect(mockAddProduct).toHaveBeenCalledTimes(1);
   });
-  })
+});

@@ -62,6 +62,9 @@ export default function Home() {
       </div>
     );
 
+    if(err) 
+      return (<div>Err :{err.meaasage}</div>)
+
   return (
     <div>
       <div>

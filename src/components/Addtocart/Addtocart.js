@@ -1,16 +1,18 @@
-import { useMutation, gql, useLazyQuery, useQuery } from "@apollo/client";
+import { useMutation,  useLazyQuery, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { additemtocart, incItemtocart } from "../../Slices/cartslice";
 import "./Addtocart.css";
 import { useState } from "react";
-import userdetails from '../userdetails'
-import { CHECKING_ITEM_INCART,ADD_ITEM_TOCART,GET_MAX_QUANTITY,UPDATE_CART } from "./Addtocart.graphql";
+import userdetails from "../userdetails";
+import {
+  CHECKING_ITEM_INCART,
+  ADD_ITEM_TOCART,
+  GET_MAX_QUANTITY,
+  UPDATE_CART,
+} from "./Addtocart.graphql";
 
 function AddToCart({ product }) {
-
   let is_admin = false;
   const { user, role } = userdetails();
   if (role === "admin") {
@@ -23,30 +25,24 @@ function AddToCart({ product }) {
   const navigate = useNavigate();
   const [inHome, setInHome] = useState(false);
   const [fetchCart] = useLazyQuery(CHECKING_ITEM_INCART);
-  const [getmaxquantity, { loading, error }] = useLazyQuery(GET_MAX_QUANTITY);
+  const [getmaxquantity] = useLazyQuery(GET_MAX_QUANTITY);
   const [addItemToCart] = useMutation(ADD_ITEM_TOCART);
   const [updateCart] = useMutation(UPDATE_CART);
- 
 
   const handleClick = async () => {
     if (!inHome) {
       setInHome(true);
 
-      const {
-        data: max
-       
-      } = await getmaxquantity({
+      const { data: max } = await getmaxquantity({
         variables: { id: product.id },
-        
       });
 
       const max_quantity = max?.products?.[0]?.quantity;
 
       try {
-        const { data, loading, error } = await fetchCart({
+        const { data, error } = await fetchCart({
           variables: { product_id: product.id, user_id: user },
           fetchPolicy: "network-only",
-         
         });
 
         if (error) {
@@ -57,7 +53,6 @@ function AddToCart({ product }) {
 
         const activeItem = existingItems.find((item) => !item.is_deleted);
         const deletedItem = existingItems.find((item) => item.is_deleted);
-        //  console.log(product);
 
         if (activeItem) {
           console.log("Active Item Found. Incrementing quantity.");
@@ -68,7 +63,6 @@ function AddToCart({ product }) {
               max_quantity: max_quantity,
               user_id: user,
             },
-            
           });
           dispatch(incItemtocart({ id: product.id, max_quantity }));
         } else if (deletedItem) {
@@ -79,7 +73,6 @@ function AddToCart({ product }) {
               product_id: product.id,
               user_id: user,
             },
-            
           });
           dispatch(additemtocart({ ...product, quantity: 1 }));
         } else {
@@ -89,7 +82,6 @@ function AddToCart({ product }) {
               product_id: product.id,
               user_id: user,
             },
-            
           });
 
           dispatch(additemtocart({ ...product, quantity: 1 }));

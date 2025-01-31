@@ -14,10 +14,10 @@ import { DELETE_MUTATION,UPDATE_CART,DEC_CART,GET_MAX_QUANTITY } from "./cart.gr
 function Cart() {
  
   const { user } = userdetails() || {};
-  const [Deletefromcart] = useMutation(DELETE_MUTATION);
-  const [IncrementCartQuantity] = useMutation(UPDATE_CART);
-  const [DecreaseCartQuantity] = useMutation(DEC_CART);
-  const [getproductquantity] = useLazyQuery(GET_MAX_QUANTITY);
+  const [Deletefromcart,{error:err}] = useMutation(DELETE_MUTATION);
+  const [IncrementCartQuantity,{error:err2}] = useMutation(UPDATE_CART);
+  const [DecreaseCartQuantity,{error:err3}] = useMutation(DEC_CART);
+  const [getproductquantity,{error:err4}] = useLazyQuery(GET_MAX_QUANTITY);
   const dispatch = useDispatch();                               
 
 
@@ -83,6 +83,19 @@ function Cart() {
   }
 
   const itemsInCart = useSelector((state) => state.cart.itemsincart);
+
+   if(err){
+    return <div>Error :{err.message}</div>
+   } 
+   if(err2){
+    return <div>Error :{err2.message}</div>
+   } 
+   if(err3){
+    return <div>Error :{err3.message}</div>
+   } 
+   if(err4){
+    return <div>Error :{err4.message}</div>
+   } 
 
   return (
     <div className="cart-component">

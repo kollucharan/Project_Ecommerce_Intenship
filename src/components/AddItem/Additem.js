@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { useMutation } from "@apollo/client";
 import { setproductdetails } from "../../Slices/productsslice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";         
 import "./Additem.css";
 import Head from "../Head/Head";
 import { ADD_PRODUCT } from "./Additem.graphql";
@@ -31,7 +31,7 @@ function AddProduct() {
 
   const dispatch = useDispatch();
 
-  const [addproduct, { loading }] = useMutation(ADD_PRODUCT);
+  const [addproduct, { loading,error }] = useMutation(ADD_PRODUCT);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -105,32 +105,35 @@ function AddProduct() {
   return (
     <div>
       <Head />
-      <h1>Add Product</h1>
+      <h1>Add The Product</h1>
       <div className="styleproductpage">
         <form onSubmit={add}>
-          <label>Product Name:</label>
+          <label for="id1">Product Name:</label>
           <input
             type="text"
             name="productname"
+            id="id1"
             required
             onChange={handleInputChange}
             value={formData.productname}
           ></input>
 
-          <label>Product Description:</label>
+          <label for ='id2'>Product Description:</label>
           <input
             type="text"
             name="productdescription"
             required
+            id='id2'
             onChange={handleInputChange}
             value={formData.productdescription}
           ></input>
 
-          <label>Product Price:</label>
+          <label for ='id3'>Product Price:</label>
           <input
             type="number"
             name="productprice"
             required
+            id='id3'
             ref={priceInputRef}
             onChange={handleInputChange}
             value={formData.productprice === 0 ? "" : formData.productprice}
@@ -143,21 +146,23 @@ function AddProduct() {
             <option value="2">Accessories</option>
             <option value="3">Home Applicances</option>
           </select>
-          <label>Image Url :</label>
+          <label for = "id4">Image Url :</label>
           <input
             type="text"
             name="imageurl"
+            id="id4"
             required
             onChange={handleInputChange}
             value={formData.imageurl} 
           ></input>
 
-          <label>Quantity:</label>
+          <label for ="id5">Quantity:</label>
           <input
             type="number"
             name="quantity"
             ref={quantityInputRef}
             required
+            id="id5"
             onChange={handleInputChange}
             value={formData.quantity === 0 ? "" : formData.quantity}
           ></input>
@@ -166,7 +171,9 @@ function AddProduct() {
             <p>{message}</p>
           ) : (
             <p style={{ color: "Red" }}>{message}</p>
-          )}
+          )} 
+
+       {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
 
           {!loading ? (
             <button type="submit"> Add Product </button>
