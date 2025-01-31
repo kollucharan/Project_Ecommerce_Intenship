@@ -157,7 +157,7 @@ function AddProduct() {
             <option value="1">Electronics</option>
             <option value="2">Accessories</option>
             <option value="3">Home Applicances</option>
-          </select> */}
+          </select> */ }
 
           <label>Category:</label>
           <select
